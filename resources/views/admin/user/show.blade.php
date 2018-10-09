@@ -16,6 +16,7 @@
             <div class="row">
                 <p>Username : {{$user->name}}</p>
                 <p>Email : {{$user->email}}</p>
+                <p><img width="300px" src="upload/user/{{$user->image}}"></p>
             </div>
             <!-- /.row -->
     </div>

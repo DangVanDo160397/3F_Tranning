@@ -17,6 +17,7 @@
                                 <th>Tên</th>
                                 <th>Giá</th>
                                 <th>Số lượng</th>
+                                <th>Ảnh</th>
                                 <th>Thể loại</th>
                                 <th>Delete</th>
                                 <th>Edit</th>
@@ -34,6 +35,7 @@
                                 <td>{{$pr->name}}</td>
                                 <td>{{$pr->price}}</td>
                                 <td>{{$pr->quantity}}</td>
+                                <td><p><img width="100px" src="upload/product/{{$pr->image}}"></p></td>
                                 <td>{{$pr->category_id}}</td>
                                 <td class="center"><i class="fa fa-trash-o  fa-fw" ></i><form action="{{route('product.destroy',$pr)}}" style="display: inline-table;" method="POST">
                                     {{ csrf_field() }} {{ method_field('DELETE') }}

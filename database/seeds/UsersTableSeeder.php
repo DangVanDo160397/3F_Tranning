@@ -12,10 +12,10 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $users = [
-        	['name' => 'dangvando', 'email' => 'dangvando@gmail.com', 'password' => Hash::make('123456')],
-        	['name' => 'admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('123456')],
-        	['name' => 'thanh', 'email' => 'nguyentuanthanh@gmail.com', 'password' => Hash::make('123456')],
-        	['name' => 'huynh', 'email' => 'NguyenBaHuynh@gmail.com', 'password' => Hash::make('123456')],
+        	['name' => 'dangvando', 'email' => 'dangvando@gmail.com', 'password' => Hash::make('123456'),'image' => '1_amenu.jpg'],
+        	['name' => 'admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('123456'),'image' => '10-1507693103760.png'],
+        	['name' => 'thanh', 'email' => 'nguyentuanthanh@gmail.com', 'password' => Hash::make('123456'),'image' => '223238498189853349474221480315508o-1507458888625.jpg'],
+        	['name' => 'huynh', 'email' => 'NguyenBaHuynh@gmail.com', 'password' => Hash::make('123456'),'image' => 'herra.jpg'],
         ];
         foreach ($users as $value) {
         	DB::table('users')->insert($value);

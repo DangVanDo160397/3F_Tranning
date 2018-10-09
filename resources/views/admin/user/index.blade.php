@@ -16,6 +16,7 @@
                                 <th>ID</th>
                                 <th>Tên</th>
                                 <th>Email</th>
+                                <th>Ảnh</th>
                                 <th>Delete</th>
                                 <th>Edit</th>
                             </tr>
@@ -31,6 +32,7 @@
                                 <td>{{$us->id}}</td>
                                 <td>{{$us->name}}</td>
                                 <td>{{$us->email}}</td>
+                                <td><p><img width="100px" src="upload/user/{{$us->image}}"></p></td>
                                 <td class="center"><i class="fa fa-trash-o  fa-fw" ></i><form action="{{route('user.destroy',$us)}}" style="display: inline-table;" method="POST">
                                     {{ csrf_field() }} {{ method_field('DELETE') }}
                                     <button type="submit" style="background: none;border: none;">Xóa</button>

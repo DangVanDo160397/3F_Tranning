@@ -18,7 +18,12 @@
                     			@endforeach
                     		</div>
                     	@endif
-                        <form action="{{route('product.update',$product)}}" method="POST">
+                            @if(session('loi'))
+                                <div class="alert alert-danger">
+                                    {{session('loi')}}
+                                </div>
+                            @endif
+                        <form action="{{route('product.update',$product)}}" enctype="multipart/form-data" method="POST">
                         	{{csrf_field()}} {{method_field('PUT')}}
                         	<div class="form-group">
                                 <label>Thể loại</label>
@@ -43,6 +48,10 @@
                             <div class="form-group">
                                 <label>Số lượng</label>
                                 <input class="form-control" name="quantity" value="{{$product->quantity}}" placeholder="Please Enter Password" />
+                            </div>
+                            <div class="form-group">
+                                <label>Ảnh</label>
+                                <input type="file" name="image" value="{{$product->image}}" class="form-control" />
                             </div>
                             <button type="submit" class="btn btn-default">Sửa</button>
                             <button type="reset" class="btn btn-default">Làm mới</button>

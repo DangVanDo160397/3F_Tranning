@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -37,28 +38,30 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:products,name|min:3|max:30',
-            'price' => 'required|integer|min:3',
-            'quantity' => 'required|integer',
-            'category_id' => 'required'
-        ],[
-            'name.required' => 'Tên sản phẩm không được để trống.',
-            'name.unique' => 'Tên sản phẩm đã tồn tại.',
-            'name.min' => 'Tên sản phẩm không ít hơn 3 kí tự.',
-            'name.max' => 'Tên sản phẩm không lớn hơn 30 ký tự',
-            'price.required' => 'Giá sản phẩm không được để trống.',
-            'price.integer' => 'Giá sản phẩm phải là số.',
-            'price.min' => 'Giá sản phẩm không ít hơn 3 chữ số.',
-            'quantity.required' => 'Số lượng không được để trống.',
-            'quantity.integer' => 'Số lượng phải là số.',
-            'category_id' => 'Tên thể loại không được để trống.'
-        ]);
-
-        $product = Product::create($request->all());
-
+        $product = new Product();
+        $product->fill($request->all());
+        if($request->hasFile("image"))
+        {
+            $file = $request->file('image');
+            $duoi = $file->getClientOriginalExtension();
+            if($duoi != 'jpg' && $duoi != 'png' && $duoi != "jpeg" )
+            {
+                return redirect()->route('product.create')->with('loi','Bạn chỉ được nhập file ảnh có đuôi png,jpg,jpeg');
+            }
+            $name = $file->getClientOriginalName();
+            $Hinh = str_random(4)."_". $name;
+            while (file_exists("upload/product".$Hinh)) {
+                $Hinh = str_random(4)."_". $name;
+            }
+            $file->move("upload/product",$Hinh);
+            $product->image = $Hinh;
+        }
+        else {
+            $product->image = "";
+        }
+        $product->save();
         return redirect()->route('product.show',$product)->with('thongbao','Thêm thành công.');
     }
 
@@ -93,26 +96,29 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:products,name|min:3|max:30',
-            'price' => 'required|integer|min:3',
-            'quantity' => 'required|integer',
-            'category_id' => 'required'
-        ],[
-            'name.required' => 'Tên sản phẩm không được để trống.',
-            'name.unique' => 'Tên sản phẩm đã tồn tại.',
-            'name.min' => 'Tên sản phẩm không ít hơn 3 kí tự.',
-            'name.max' => 'Tên sản phẩm không lớn hơn 30 ký tự',
-            'price.required' => 'Giá sản phẩm không được để trống.',
-            'price.integer' => 'Giá sản phẩm phải là số.',
-            'price.min' => 'Giá sản phẩm không ít hơn 3 chữ số.',
-            'quantity.required' => 'Số lượng không được để trống.',
-            'quantity.integer' => 'Số lượng phải là số.',
-            'category_id' => 'Tên thể loại không được để trống.'
-        ]);
-        $product->update($request->all());
+        $product->fill($request->all());
+        if($request->hasFile("image"))
+        {
+            $file = $request->file('image');
+            $duoi = $file->getClientOriginalExtension();
+            if($duoi != 'jpg' && $duoi != 'png' && $duoi != "jpeg" )
+            {
+                return redirect()->route('product.create')->with('loi','Bạn chỉ được nhập file ảnh có đuôi png,jpg,jpeg');
+            }
+            $name = $file->getClientOriginalName();
+            $Hinh = str_random(4)."_". $name;
+            while (file_exists("upload/product".$Hinh)) {
+                $Hinh = str_random(4)."_". $name;
+            }
+            $file->move("upload/product",$Hinh);
+            $product->image = $Hinh;
+        }
+        else {
+            $product->image = "";
+        }
+        $product->save();
         return redirect()->route('product.show',$product)->with('thongbao','Sửa thành công.');
     }
 

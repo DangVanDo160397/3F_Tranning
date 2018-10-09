@@ -36,20 +36,9 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:categories,name|min:3|max:30'
-        ],[
-            'name.required' => 'Tên thể loại không được để trống.',
-            'name.unique' => 'Tên thể loại đã tồn tại.',
-            'name.min' => 'Tên thể loại không ít hơn 3 kí tự.',
-            'name.max' => 'Tên thể loại không lớn hơn 30 ký tự'
-
-        ]);
-
         $category = Category::create($request->all());
-
         return redirect()->route('category.show',$category)->with('thongbao','Thêm thành công.');
        
     }
@@ -83,17 +72,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:categories,name|min:3|max:30'
-        ],[
-            'name.required' => 'Tên thể loại không được để trống.',
-            'name.unique' => 'Tên thể loại đã tồn tại.',
-            'name.min' => 'Tên thể loại không ít hơn 3 kí tự.',
-            'name.max' => 'Tên thể loại không lớn hơn 30 ký tự'
-
-        ]);
         $category->update($request->all());
         return redirect()->route('category.show',$category)->with('thongbao','Sửa thành công.');
     }

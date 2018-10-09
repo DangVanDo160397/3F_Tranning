@@ -17,6 +17,7 @@
                 <p>Tên sản phẩm : {{$product->name}}</p>
                 <p>Giá sản phẩm : {{$product->price}}</p>
                 <p>Số lượng sản phẩm :{{$product->quantity}}</p>
+                <p><img width="300px" src="upload/product/{{$product->image}}"></p>
             	<p>Id Thể loại : {{$product->category_id}}</p>
             </div>
             <!-- /.row -->

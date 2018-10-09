@@ -18,7 +18,12 @@
                     			@endforeach
                     		</div>
                     	@endif
-                        <form action="{{route('user.store')}}" method="POST">
+                            @if(session('loi'))
+                                <div class="alert alert-danger">
+                                    {{session('loi')}}
+                                </div>
+                            @endif
+                        <form action="{{route('user.store')}}" enctype="multipart/form-data" method="POST">
                         	{{csrf_field()}}
                             <div class="form-group">
                                 <label>Username</label>
@@ -27,6 +32,10 @@
                             <div class="form-group">
                                 <label>Email</label>
                                 <input class="form-control" name="email" placeholder="Please Enter Password" />
+                            </div>
+                            <div class="form-group">
+                                <label>Ảnh</label>
+                                <input type="file" name="image" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <label>Password</label>

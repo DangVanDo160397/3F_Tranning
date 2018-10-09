@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Requests\UserRequest;
 class UserController extends Controller
 {
     /**
@@ -33,28 +35,31 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:users,name|min:3|max:30',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:3|max:30'
-        ],[
-            'name.required' => ' Username không được để trống.',
-            'name.unique' => 'Username đã tồn tại.',
-            'name.min' => 'Username không ít hơn 3 kí tự.',
-            'name.max' => 'Username không lớn hơn 30 ký tự',
-            'email.required' => 'Email không được để trống.',
-            'email.email' => 'Không đúng định dạng email.',
-            'email.unique' => 'Email đã tồn tại.',
-            'password.required' => 'Password không được để trống.',
-            'password.min' => 'Password không dưới 3 kí tự.',
-            'password.max' => 'Password không lớn hơn 30 ký tự',
-
-        ]);
-
-        $user = User::create($request->all());
-
+        $user = new User();
+        $user->fill($request->all());
+        $user->password = Hash::make($user->password);
+        if($request->hasFile("image"))
+        {
+            $file = $request->file('image');
+            $duoi = $file->getClientOriginalExtension();
+            if($duoi != 'jpg' && $duoi != 'png' && $duoi != "jpeg" )
+            {
+                return redirect->route('user.create')->with('loi','Bạn chỉ được nhập file ảnh có đuôi png,jpg,jpeg');
+            }
+            $name = $file->getClientOriginalName();
+            $Hinh = str_random(4)."_". $name;
+            while (file_exists("upload/user".$Hinh)) {
+                $Hinh = str_random(4)."_". $name;
+            }
+            $file->move("upload/user",$Hinh);
+            $user->image = $Hinh;
+        }
+        else {
+            $user->image = "";
+        }
+        $user->save();
         return redirect()->route('user.show',$user)->with('thongbao','Thêm thành công.');
        
     }
@@ -88,21 +93,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        $this->validate($request,[
-            'name' => 'required|unique:users,name|min:3|max:30',
-            'email' => 'required|email|unique:users,email',
-        ],[
-            'name.required' => ' Username không được để trống.',
-            'name.unique' => 'Username đã tồn tại.',
-            'name.min' => 'Username không ít hơn 3 kí tự.',
-            'name.max' => 'Username không lớn hơn 30 ký tự',
-            'email.required' => 'Email không được để trống.',
-            'email.email' => 'Không đúng định dạng email.',
-            'email.unique' => 'Email đã tồn tại.'
-        ]);
-        $user->update($request->all());
+        $user->fill($request->all());
+        $user->password = Hash::make($user->password);
+        if($request->hasFile("image"))
+        {
+            $file = $request->file('image');
+            $duoi = $file->getClientOriginalExtension();
+            if($duoi != 'jpg' && $duoi != 'png' && $duoi != "jpeg" )
+            {
+                return redirect("admin/tintuc/them")->with('loi','Bạn chỉ được nhập file ảnh có đuôi png,jpg,jpeg');
+            }
+            $name = $file->getClientOriginalName();
+            $Hinh = str_random(4)."_". $name;
+            while (file_exists("upload/user".$Hinh)) {
+                $Hinh = str_random(4)."_". $name;
+            }
+            $file->move("upload/user",$Hinh);
+            $user->image = $Hinh;
+        }
+        else {
+            $user->image = "";
+        }
+        $user->save();
         return redirect()->route('user.show',$user)->with('thongbao','Sửa thành công.');
     }
 
